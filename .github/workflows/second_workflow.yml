@@ -5,6 +5,12 @@ on:
     branches:
       - main
       - 'feature/**'
+
+permissions:
+  contents: write
+  actions: write
+  checks: write
+
 jobs:
   notify:
     runs-on: ubuntu-latest
