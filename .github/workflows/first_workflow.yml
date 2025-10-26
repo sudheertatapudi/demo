@@ -23,10 +23,10 @@ jobs:
         
       - name: Run tests
         run: mvn test -o  # -o means offline mode, using only cached dependencies
-    deploy:
-      needs: build
-      runs-on: ubuntu-latest
-      steps:
-        - name: Deployment Step
-          run: echo "Deploying application..."    
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deployment Step
+        run: echo "Deploying application..."   
         
