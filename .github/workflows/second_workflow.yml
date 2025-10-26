@@ -1,5 +1,10 @@
 name: second_workflow
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - 'feature/**'
 jobs:
   notify:
     runs-on: ubuntu-latest
