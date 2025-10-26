@@ -1,0 +1,8 @@
+name: second_workflow
+on: workflow_dispatch
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Notification
+        run: echo "This is the second workflow!"
