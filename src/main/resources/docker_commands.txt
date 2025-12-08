@@ -1,0 +1,131 @@
+
+docker pull alpine
+docker history alpine
+docker images --digests alpine
+docker rmi alpine
+docker image pull ubuntu:20.04
+docker image remove ubuntu:20.04
+
+docker run -it ubuntu bash  --> runs container in interactive mode
+apt update
+apt install nano
+apt install vim
+apt install htop
+
+exit
+docker ps -a
+docker rm <container name>
+
+docker run -it amazonlinux bash
+yum update
+yum install nano
+yum install vim
+yum install htop
+
+docker run --rm ubuntu cat /etc/os-release  --> removes container immediately
+docker run --rm amazonlinux cat /etc/os-release
+
+docker run -d nginx
+docker run -d -p 12301:80 nginx
+
+docker stop <container name/id>
+
+ docker run -d -p 12301:80 -v C:\devops_workspace\websites\website1:/usr/share/nginx/html nginx
+ docker run -d -p 12302:80 -v C:\devops_workspace\websites\website2:/usr/share/nginx/html nginx
+ docker run -d -p 12303:80 -v C:\devops_workspace\websites\website3:/usr/share/nginx/html nginx
+
+ curl http://localhost:12303/
+
+ docker exec -it <container name/id> /bin/bash
+
+ K8S:
+
+ systemctl status containerd
+
+ which runc
+ /usr/local/sbin/runc
+
+ which ctr
+ /usr/local/bin/ctr   --> containerd admin tool
+
+ ctr container list
+ ctr image list
+ ctr task list
+
+ ctr images pull docker.io/library/ubuntu:latest
+
+ ctr run -t -d docker.io/library/ubuntu:latest quirky
+
+ ps -ef --forest
+
+ ctr container delete quirky
+
+
+tar -xzvf /resources/nerdctl-1.1.0-linux.tar.gz --directory /usr/local/bin nerdctl
+tar -xzvf /resources/cni-plugins-linux-v1.2.0.tgz -C /opt/cni/bin
+ls -altr /etc/cni/net.d
+
+apt install -y iproute2
+
+nerdctl run --rm -it ubuntu bash
+
+cat /etc/cni/net.d/nerdctl-bridge.conflist
+ip addr
+
+mv /etc/cni/net.d/nerdctl-bridge.conflist /resources
+
+kubeadm init --pod-network-cidr=10.10.0.0/16 --kubernetes-version=1.31.0
+
+Your Kubernetes control-plane has initialized successfully!
+
+To start using your cluster, you need to run the following as a regular user:
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+Alternatively, if you are the root user, you can run:
+
+  export KUBECONFIG=/etc/kubernetes/admin.conf
+
+kubectl get nodes
+
+cat /resources/cni/10-bridge.conf
+
+sleep 3 && cp /resources/cni/10-bridge.conf /etc/cni/net.d & watch kubectl get nodes -o wide
+
+kubectl describe node control-plane | more
+
+kubectl taint node control-plane node-role.kubernetes.io/control-plane:NoSchedule-
+
+kubectl run nginx --image=nginx; watch kubectl get pods -o wide
+
+kubectl get pods -o wide
+
+IP=$(kubectl get pods -o wide | grep nginx | awk {'print $6'}); echo $IP
+
+nerdctl ps -a
+nerdctl namespace ls
+nerdctl -n k8s.io ps -a
+
+nerdctl -n k8s.io ps -a | grep -v pause
+
+nerdctl -n k8s.io ps -a | grep nginx
+
+nerdctl -n k8s.io ps -a | grep nginx | grep -v pause
+
+CONTAINER=$(nerdctl -n k8s.io ps -a | grep nginx | grep -v pause | awk {`print $1`});
+
+if we stop application pod IP ll not change because pause container of respective pod takes care of IP address
+
+if we stop pause container of app pod, IP of pod will change
+
+
+kubectl delete pod/nginx --grace-period=0
+
+kubectl run nginx --image=nginx --dry-run=client -o yaml > /etc/kubernetes/resources/nginx_pod.yaml
+kubectl apply -f /etc/kubernetes/resources/nginx_pod.yaml
+
+
+
+kubectl delete --grace-period=0 -f /etc/kubernetes/resources/nginx_pod.yaml
